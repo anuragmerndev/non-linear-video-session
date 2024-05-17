@@ -1,15 +1,10 @@
+import { isValidObjectId, ObjectId } from 'mongoose';
 import { z } from 'zod';
 
-const createVideoValidator = z.object({});
+const validateVideoParam = z.object({
+    video_id: z.custom<ObjectId>((val) => isValidObjectId(val)),
+});
 
-const updateVideoValidator = z.object({});
+type videoParamType = z.infer<typeof validateVideoParam>;
 
-type createVideoType = z.infer<typeof createVideoValidator>;
-type updateVideoType = z.infer<typeof updateVideoValidator>;
-
-export {
-    createVideoType,
-    createVideoValidator,
-    updateVideoType,
-    updateVideoValidator,
-};
+export { videoParamType, validateVideoParam };

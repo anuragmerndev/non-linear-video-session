@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 
 import {
-    createVideoValidator,
-    updateVideoValidator,
+    validateVideoParam,
+    videoParamType,
 } from '@validators/video.validators';
 
 import {
@@ -15,18 +15,12 @@ import {
 import { ApiError } from '@utils/apiError';
 import { apiResponse } from '@utils/apiResponse';
 import { asyncHandler } from '@utils/asyncHandler';
+import { errorResponse } from '@utils/errorMessage';
 import { responseMessage } from '@utils/responseMessage';
 import { RESPONSE_STATUS } from '@utils/responseStatus';
 
 const createVideo = asyncHandler(async (req: Request, res: Response) => {
     const body = req.body;
-
-    const result = createVideoValidator.safeParse(body);
-    if (!result.success) {
-        throw new ApiError(RESPONSE_STATUS.FORBIDDEN, {
-            message: result.error.issues,
-        });
-    }
 
     const newVideo = await createNewVideo(body);
 
@@ -39,12 +33,28 @@ const createVideo = asyncHandler(async (req: Request, res: Response) => {
 const getVideo = asyncHandler(async (req: Request, res: Response) => {
     const params = req.params;
 
-    const { id } = params;
+    const validVideoID = validateVideoParam.safeParse(params);
+    if (!validVideoID.success) {
+        throw new ApiError(RESPONSE_STATUS.FORBIDDEN, {
+            message: validVideoID.error.issues,
+        });
+    }
 
-    const getVideoData = await getVideobyId(id);
+    const { video_id } = params as unknown as videoParamType;
+    console.log({ video_id });
 
-    return apiResponse(res, RESPONSE_STATUS.SUCCESS, {
-        data: getVideoData,
+    const foundVideo = await getVideobyId(video_id);
+    console.log({ foundVideo });
+
+    if (!foundVideo) {
+        throw new ApiError(
+            RESPONSE_STATUS.NOT_FOUND,
+            errorResponse.VIDEO.NOT_FOUND,
+        );
+    }
+
+    return apiResponse(res, RESPONSE_STATUS.CREATED, {
+        data: foundVideo,
         message: responseMessage.VIDEO.RETRIEVED,
     });
 });
@@ -53,17 +63,18 @@ const updateVideoData = asyncHandler(async (req: Request, res: Response) => {
     const body = req.body;
     const params = req.params;
 
-    const bodyValid = updateVideoValidator.safeParse(body);
-    if (!bodyValid.success) {
+    const validVideoID = validateVideoParam.safeParse(params);
+    if (!validVideoID.success) {
         throw new ApiError(RESPONSE_STATUS.FORBIDDEN, {
-            message: bodyValid.error.issues,
+            message: validVideoID.error.issues,
         });
     }
 
-    const { id } = params;
+    const { video_id } = params as unknown as videoParamType;
+    const { name } = body;
 
-    const updateData = await updateVideo(id, {
-        body,
+    const updateData = await updateVideo(video_id, {
+        name,
     });
 
     return apiResponse(res, RESPONSE_STATUS.SUCCESS, {
@@ -75,13 +86,20 @@ const updateVideoData = asyncHandler(async (req: Request, res: Response) => {
 const deleteVideo = asyncHandler(async (req: Request, res: Response) => {
     const params = req.params;
 
-    const { id } = params;
+    const validVideoID = validateVideoParam.safeParse(params);
+    if (!validVideoID.success) {
+        throw new ApiError(RESPONSE_STATUS.FORBIDDEN, {
+            message: validVideoID.error.issues,
+        });
+    }
 
-    await deleteVideobyID(id);
+    const { video_id } = params as unknown as videoParamType;
+
+    await deleteVideobyID(video_id);
 
     return apiResponse(res, RESPONSE_STATUS.NOCONTENT, {
         message: responseMessage.VIDEO.DELETED,
     });
 });
 
-export { createVideo, getVideo, updateVideoData, deleteVideo };
+export { createVideo, updateVideoData, deleteVideo, getVideo };

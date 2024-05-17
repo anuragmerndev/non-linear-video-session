@@ -1,3 +1,5 @@
+import { ObjectId } from 'mongoose';
+
 import { VideoModel } from '@models/video.models';
 
 import { IVideo } from '@projTypes/video.types';
@@ -6,15 +8,15 @@ const createNewVideo = async (data: IVideo) => {
     return await VideoModel.create(data);
 };
 
-const getVideobyId = async (id: string) => {
+const getVideobyId = async (id: ObjectId) => {
     return await VideoModel.findById(id);
 };
 
-const updateVideo = async (id: string, data: Partial<IVideo>) => {
-    return await VideoModel.findByIdAndUpdate(id, data);
+const updateVideo = async (id: ObjectId, data: Partial<IVideo>) => {
+    return await VideoModel.findByIdAndUpdate(id, data, { new: true });
 };
 
-const deleteVideobyID = async (id: string) => {
+const deleteVideobyID = async (id: ObjectId) => {
     return await VideoModel.findByIdAndDelete(id);
 };
 
