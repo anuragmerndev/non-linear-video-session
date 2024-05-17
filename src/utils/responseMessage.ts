@@ -6,6 +6,18 @@ const responseMessage = {
         RETRIEVED: 'Videos retrieved successfully',
         DELETED: 'Video is deleted',
     },
+    QUESTION: {
+        CREATED: 'Question created successfully',
+        UPDATED: 'Question details updated successfully',
+        RETRIEVED: 'Questions retrieved successfully',
+        DELETED: 'Question is deleted',
+    },
+    CHOICE: {
+        CREATED: 'Choice created successfully',
+        UPDATED: 'Choice details updated successfully',
+        RETRIEVED: 'Choices retrieved successfully',
+        DELETED: 'Choice is deleted',
+    },
     OTHER: {
         SERVER_ERROR: 'Internal Server Error',
     },

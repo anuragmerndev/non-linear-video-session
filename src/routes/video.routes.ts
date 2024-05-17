@@ -2,16 +2,18 @@ import { Router } from 'express';
 
 import {
     createVideo,
-    getVideo,
     updateVideoData,
     deleteVideo,
+    getVideo,
 } from '@controllers/video.controllers';
 
 const videoRouter = Router();
 
+const videoID = 'video_id';
+
 videoRouter.post('/', createVideo);
-videoRouter.get('/:id', getVideo);
-videoRouter.put('/:id', updateVideoData);
-videoRouter.delete('/:id', deleteVideo);
+videoRouter.get(`/:${videoID}`, getVideo);
+videoRouter.put(`/:${videoID}`, updateVideoData);
+videoRouter.delete(`/:${videoID}`, deleteVideo);
 
 export { videoRouter };

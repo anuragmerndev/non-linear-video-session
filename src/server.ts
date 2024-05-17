@@ -18,7 +18,6 @@ const PORT = process.env.PORT ? Number(process.env.PORT) : 8080;
 
 const ENV = process.env.NODE_ENV;
 
-
 if (ENV === 'development') {
     app.listen(PORT, () => {
         logger.info(`server is running ${PORT}`);
