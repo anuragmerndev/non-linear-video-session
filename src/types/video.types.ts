@@ -1,0 +1,3 @@
+interface IVideo {}
+
+export { IVideo };
