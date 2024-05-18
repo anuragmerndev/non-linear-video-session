@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import mongoose, { ObjectId } from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 
 import { logger } from '@logger/logger';
 import {
@@ -56,7 +56,7 @@ const createQuestion = asyncHandler(async (req: Request, res: Response) => {
 
         const newChoiceArray: IChoice[] = choices.map((choice) => ({
             ...choice,
-            for_question: newQuestion[0]._id as unknown as ObjectId,
+            for_question: newQuestion[0]._id as unknown as Types.ObjectId,
         }));
 
         await createNewChoice(newChoiceArray, transaction);
@@ -91,8 +91,6 @@ const getQuestion = asyncHandler(async (req: Request, res: Response) => {
         params: { question_id },
     } = req as unknown as questionIDType;
 
-    console.log({ question_id });
-
     const questionFound = await getQuestionbyId(question_id);
     if (!questionFound) {
         throw new ApiError(
@@ -117,7 +115,7 @@ const updateQuestionData = asyncHandler(async (req: Request, res: Response) => {
 
     const {
         body: { question },
-        param: { question_id },
+        params: { question_id },
     } = req as unknown as updateQuestionType;
 
     const alreadyQuestion = await getQuestionbyId(question_id);

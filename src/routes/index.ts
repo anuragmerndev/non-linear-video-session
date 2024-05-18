@@ -8,7 +8,7 @@ import { questionRouter } from './question.routes';
 const rootRouter = Router();
 
 rootRouter.use('/video', videoRouter);
-rootRouter.use('/question', questionRouter);
 rootRouter.use('/choice', choiceRouter);
+rootRouter.use('/question', questionRouter);
 
 export { rootRouter };

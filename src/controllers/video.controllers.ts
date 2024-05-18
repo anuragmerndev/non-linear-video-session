@@ -41,10 +41,8 @@ const getVideo = asyncHandler(async (req: Request, res: Response) => {
     }
 
     const { video_id } = params as unknown as videoParamType;
-    console.log({ video_id });
 
     const foundVideo = await getVideobyId(video_id);
-    console.log({ foundVideo });
 
     if (!foundVideo) {
         throw new ApiError(
