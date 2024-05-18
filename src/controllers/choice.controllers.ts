@@ -32,14 +32,14 @@ const getChoice = asyncHandler(async (req: Request, res: Response) => {
     }
 
     const {
-        param: { choice_id },
+        params: { choice_id },
     } = req as unknown as choiceIDType;
 
     const choiceFound = await getChoicebyId(choice_id);
     if (!choiceFound) {
         throw new ApiError(
             RESPONSE_STATUS.NOT_FOUND,
-            errorResponse.QUESTION.NOT_FOUND,
+            errorResponse.CHOICE.NOT_FOUND,
         );
     }
 
@@ -59,7 +59,7 @@ const updateChoiceData = asyncHandler(async (req: Request, res: Response) => {
 
     const {
         body,
-        param: { choice_id },
+        params: { choice_id },
     } = req as unknown as updateChoiceType;
 
     const alreadyChoice = await getChoicebyId(choice_id);
@@ -70,21 +70,24 @@ const updateChoiceData = asyncHandler(async (req: Request, res: Response) => {
         );
     }
 
-    const alreadyName = await getChoicebyName(
-        body?.label as string,
-        alreadyChoice.for_question,
-    );
-    if (alreadyName) {
-        throw new ApiError(
-            RESPONSE_STATUS.CONFLICT,
-            errorResponse.CHOICE.CONFLICT,
+    if (body?.label) {
+        const alreadyName = await getChoicebyName(
+            body?.label as string,
+            // @ts-expect-error need to check this _id thing
+            alreadyChoice?.for_question?._id,
         );
+        if (alreadyName) {
+            throw new ApiError(
+                RESPONSE_STATUS.CONFLICT,
+                errorResponse.CHOICE.CONFLICT,
+            );
+        }
     }
 
     const updatedQuestion = await updateChoice(choice_id, body as IChoice);
     return apiResponse(res, RESPONSE_STATUS.SUCCESS, {
         data: updatedQuestion,
-        message: responseMessage.QUESTION.UPDATED,
+        message: responseMessage.CHOICE.UPDATED,
     });
 });
 
@@ -97,21 +100,21 @@ const deleteChoice = asyncHandler(async (req: Request, res: Response) => {
     }
 
     const {
-        param: { choice_id },
+        params: { choice_id },
     } = req as unknown as choiceIDType;
 
     const choiceFound = await getChoicebyId(choice_id);
     if (!choiceFound) {
         throw new ApiError(
             RESPONSE_STATUS.NOT_FOUND,
-            errorResponse.QUESTION.NOT_FOUND,
+            errorResponse.CHOICE.NOT_FOUND,
         );
     }
 
     await deleteChoicebyID(choice_id);
 
     return apiResponse(res, RESPONSE_STATUS.NOCONTENT, {
-        message: responseMessage.QUESTION.DELETED,
+        message: responseMessage.CHOICE.DELETED,
     });
 });
 

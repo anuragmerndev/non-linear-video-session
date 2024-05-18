@@ -1,4 +1,4 @@
-import { ClientSession, ObjectId } from 'mongoose';
+import { ClientSession, Types } from 'mongoose';
 
 import { QuestionModel } from '@models/question.model';
 
@@ -8,9 +8,13 @@ const createNewQuestion = async (data: IQuestion, session: ClientSession) => {
     return await QuestionModel.create([data], { session });
 };
 
-const getQuestionbyId = async (id: ObjectId) => {
+const getQuestionbyId = async (id: Types.ObjectId) => {
     const question = await QuestionModel.aggregate([
-        { $match: { _id: id } },
+        {
+            $match: {
+                _id: new Types.ObjectId(id),
+            },
+        },
         {
             $lookup: {
                 from: 'choices',
@@ -29,11 +33,11 @@ const getQuestionbyName = async (name: string) => {
     });
 };
 
-const updateQuestion = async (id: ObjectId, data: Partial<IQuestion>) => {
-    return await QuestionModel.findByIdAndUpdate(id, data);
+const updateQuestion = async (id: Types.ObjectId, data: Partial<IQuestion>) => {
+    return await QuestionModel.findByIdAndUpdate(id, data, { new: true });
 };
 
-const deleteQuestionbyID = async (id: ObjectId) => {
+const deleteQuestionbyID = async (id: Types.ObjectId) => {
     return await QuestionModel.findByIdAndDelete(id);
 };
 

@@ -1,5 +1,7 @@
-import { isValidObjectId, ObjectId } from 'mongoose';
+import { isValidObjectId, Types } from 'mongoose';
 import { z } from 'zod';
+
+import { convertStringToObjectID } from '@utils/helper';
 
 const createQuestionValidator = z.object({
     question: z.string().min(5),
@@ -7,16 +9,18 @@ const createQuestionValidator = z.object({
         z.object({
             label: z.string().min(3),
             next_question: z.nullable(
-                z.custom<ObjectId>((val) => isValidObjectId(val)),
+                z.custom<Types.ObjectId>((val) => isValidObjectId(val)),
             ),
-            related_video: z.custom<ObjectId>((val) => isValidObjectId(val)),
+            related_video: z.custom<Types.ObjectId>((val) =>
+                isValidObjectId(val),
+            ),
         }),
     ),
 });
 
 const updateQuestionValidator = z.object({
-    param: z.object({
-        question_id: z.custom<ObjectId>((val) => isValidObjectId(val)),
+    params: z.object({
+        question_id: z.custom<Types.ObjectId>((val) => isValidObjectId(val)),
     }),
     body: z.object({
         question: z.string().min(5).optional(),
@@ -24,31 +28,35 @@ const updateQuestionValidator = z.object({
 });
 
 const updateChoiceValidator = z.object({
-    param: z.object({
-        choice_id: z.custom<ObjectId>((val) => isValidObjectId(val)),
+    params: z.object({
+        choice_id: z.custom<Types.ObjectId>((val) => isValidObjectId(val)),
     }),
     body: z
         .object({
             label: z.string().min(3).optional(),
             next_question: z
-                .nullable(z.custom<ObjectId>((val) => isValidObjectId(val)))
+                .nullable(
+                    z.custom<Types.ObjectId>((val) => isValidObjectId(val)),
+                )
                 .optional(),
             related_video: z
-                .custom<ObjectId>((val) => isValidObjectId(val))
+                .custom<Types.ObjectId>((val) => isValidObjectId(val))
                 .optional(),
         })
         .optional(),
 });
 
 const choiceidParamValidator = z.object({
-    param: z.object({
-        choice_id: z.custom<ObjectId>((val) => isValidObjectId(val)),
+    params: z.object({
+        choice_id: z.custom<Types.ObjectId>((val) => isValidObjectId(val)),
     }),
 });
 
 const questionidParamValidator = z.object({
     params: z.object({
-        question_id: z.custom<ObjectId>((val) => isValidObjectId(val)),
+        question_id: z.custom<Types.ObjectId>((val) =>
+            isValidObjectId(val) ? convertStringToObjectID(val) : false,
+        ),
     }),
 });
 

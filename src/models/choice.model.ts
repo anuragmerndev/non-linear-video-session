@@ -1,10 +1,6 @@
-import { Schema, model, Types, Document } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 
-import { IChoice } from '@projTypes/choices.types';
-
-interface IChoiceModel extends Document, IChoice {}
-
-const choiceSchema: Schema<IChoiceModel> = new Schema({
+const choiceSchema: Schema = new Schema({
     label: {
         type: String,
         required: true,

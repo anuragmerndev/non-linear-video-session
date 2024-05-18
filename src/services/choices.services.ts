@@ -1,4 +1,4 @@
-import { ClientSession, ObjectId } from 'mongoose';
+import { ClientSession, Types } from 'mongoose';
 
 import { ChoiceModel } from '@models/choice.model';
 
@@ -24,25 +24,24 @@ const createNewChoice = async (data: IChoice[], session: ClientSession) => {
     );
 };
 
-const getChoicebyId = async (id: ObjectId) => {
-    return await ChoiceModel.findById(id).populate(
-        'for_question',
-        'next_question',
-        'related_video',
-    );
+const getChoicebyId = async (id: Types.ObjectId) => {
+    return await ChoiceModel.findById(id)
+        .populate('for_question', '_id question')
+        .populate('next_question', '_id question')
+        .populate('related_video', '_id name');
 };
 
-const getChoicebyName = async (name: string, questionID: ObjectId) => {
+const getChoicebyName = async (name: string, questionID: Types.ObjectId) => {
     return await ChoiceModel.findOne({ name, for_question: questionID });
 };
 
-const updateChoice = async (id: ObjectId, data: Partial<IChoice>) => {
+const updateChoice = async (id: Types.ObjectId, data: Partial<IChoice>) => {
     return await ChoiceModel.findByIdAndUpdate(id, data, {
         new: true,
     });
 };
 
-const deleteChoicebyID = async (id: ObjectId) => {
+const deleteChoicebyID = async (id: Types.ObjectId) => {
     return await ChoiceModel.findByIdAndDelete(id);
 };
 
