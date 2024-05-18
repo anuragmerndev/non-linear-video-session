@@ -17,6 +17,16 @@ const responseMessage = {
         RETRIEVED: 'Choice retrieved successfully',
         DELETED: 'Choice is deleted',
     },
+    USER: {
+        CREATED: 'User created successfully',
+        LOGGED_IN: 'User loggedin successfully',
+        UPDATED: 'User details updated successfully',
+        RETRIEVED: 'User retrieved successfully',
+        DELETED: 'User is deleted',
+    },
+    INTERACTION: {
+        CREATED: 'user interaction registered',
+    },
     OTHER: {
         SERVER_ERROR: 'Internal Server Error',
     },

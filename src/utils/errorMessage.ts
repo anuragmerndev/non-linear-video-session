@@ -19,6 +19,18 @@ const errorResponse = {
         DELETION_FAILED: 'Failed to delete choice',
         CONFLICT: 'Already a choice with the same title',
     },
+    USER: {
+        NOT_FOUND: 'User not found',
+        CREATION_FAILED: 'Failed to create user',
+        UPDATE_FAILED: 'Failed to update user',
+        DELETION_FAILED: 'Failed to delete user',
+        CONFLICT: 'Already a user with the same title',
+        WRONG_PASSWORD: 'user password is wrong',
+    },
+    TOKEN: {
+        NOT_FOUND: 'Token not found',
+        INVALID: 'Token is invalid',
+    },
 };
 
 export { errorResponse };
