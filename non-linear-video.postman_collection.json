@@ -1,0 +1,550 @@
+{
+	"info": {
+		"_postman_id": "1f465390-14e4-45d3-ac57-841d84e325d0",
+		"name": "non-linear-video",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24752733"
+	},
+	"item": [
+		{
+			"name": "Questions",
+			"item": [
+				{
+					"name": "create question",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"pm.test(\"set data\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.collectionVariables.set('QUESTION_ID', jsonData.data.question._id);\r",
+									"    pm.collectionVariables.set('CHOICE_ID', jsonData.data.question.choices[0]._id);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"question\": \"{{$randomLoremSentence}}\",\r\n    \"choices\": [\r\n        {\r\n            \"label\": \"{{$randomFirstName}}\",\r\n            \"next_question\": \"{{QUESTION_ID}}\",\r\n            \"related_video\": \"{{VIDEO_ID}}\"\r\n        },\r\n        {\r\n            \"label\": \"{{$randomFirstName}}\",\r\n            \"next_question\": \"{{QUESTION_ID}}\",\r\n            \"related_video\": \"{{VIDEO_ID}}\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{NLV_URL}}/question",
+							"host": [
+								"{{NLV_URL}}"
+							],
+							"path": [
+								"question"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get question",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{NLV_URL}}/question/664868d24a73efa089e05094",
+							"host": [
+								"{{NLV_URL}}"
+							],
+							"path": [
+								"question",
+								"664868d24a73efa089e05094"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update question",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"question\": \"{{$randomLoremSentence}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{NLV_URL}}/question/{{QUESTION_ID}}",
+							"host": [
+								"{{NLV_URL}}"
+							],
+							"path": [
+								"question",
+								"{{QUESTION_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete question",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{NLV_URL}}/question/{{QUESTION_ID}}",
+							"host": [
+								"{{NLV_URL}}"
+							],
+							"path": [
+								"question",
+								"{{QUESTION_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Choice",
+			"item": [
+				{
+					"name": "get choice",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{NLV_URL}}/choice/{{CHOICE_ID}}",
+							"host": [
+								"{{NLV_URL}}"
+							],
+							"path": [
+								"choice",
+								"{{CHOICE_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update choice",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"label\": \"{{$randomFirstName}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{NLV_URL}}/choice/{{CHOICE_ID}}",
+							"host": [
+								"{{NLV_URL}}"
+							],
+							"path": [
+								"choice",
+								"{{CHOICE_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete choice",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{NLV_URL}}/choice/{{CHOICE_ID}}",
+							"host": [
+								"{{NLV_URL}}"
+							],
+							"path": [
+								"choice",
+								"{{CHOICE_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Video",
+			"item": [
+				{
+					"name": "create video",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"pm.test(\"set data\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.collectionVariables.set('VIDEO_ID', jsonData.data._id);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{$randomFirstName}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{NLV_URL}}/video",
+							"host": [
+								"{{NLV_URL}}"
+							],
+							"path": [
+								"video"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update video",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{$randomFirstName}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{NLV_URL}}/video/{{VIDEO_ID}}",
+							"host": [
+								"{{NLV_URL}}"
+							],
+							"path": [
+								"video",
+								"{{VIDEO_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get video",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{NLV_URL}}/video/{{VIDEO_ID}}",
+							"host": [
+								"{{NLV_URL}}"
+							],
+							"path": [
+								"video",
+								"{{VIDEO_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete video",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{NLV_URL}}/video/{{VIDEO_ID}}",
+							"host": [
+								"{{NLV_URL}}"
+							],
+							"path": [
+								"video",
+								"{{VIDEO_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Interaction",
+			"item": [
+				{
+					"name": "register interaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"pm.test(\"set data\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.collectionVariables.set('VIDEO_ID', jsonData.data._id);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{NLV_URL}}/interaction/664868d49c76051e6edeb9bd",
+							"host": [
+								"{{NLV_URL}}"
+							],
+							"path": [
+								"interaction",
+								"664868d49c76051e6edeb9bd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "video session",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"pm.test(\"set data\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.collectionVariables.set('VIDEO_ID', jsonData.data._id);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{NLV_URL}}/interaction/video-session",
+							"host": [
+								"{{NLV_URL}}"
+							],
+							"path": [
+								"interaction",
+								"video-session"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "create user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"pm.test(\"set data\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.collectionVariables.set('ACCESS_TOKEN', jsonData.access_token);\r",
+									"    pm.collectionVariables.set('USER_EMAIL', jsonData.data.email);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{$randomFirstName}}@example.com\",\r\n    \"password\": \"Anurag@123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{NLV_URL}}/user/register",
+							"host": [
+								"{{NLV_URL}}"
+							],
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"set data\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.collectionVariables.set('ACCESS_TOKEN', jsonData.access_token);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{USER_EMAIL}}\",\r\n    \"password\": \"Anurag@123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{NLV_URL}}/user/login",
+							"host": [
+								"{{NLV_URL}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "NLV_URL",
+			"value": "http://localhost:8001/v1",
+			"type": "string"
+		},
+		{
+			"key": "VIDEO_ID",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "CHOICE_ID",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "QUESTION_ID",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "ACCESS_TOKEN",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "USER_EMAIL",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

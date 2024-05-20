@@ -6,11 +6,13 @@ const createInteraction = async (
     userID: Types.ObjectId,
     question: string,
     video: string,
+    end?: boolean,
 ) => {
     return await UserInteractionModel.create({
         user: userID,
         current_question: question,
         current_video: video,
+        endVideo: end,
     });
 };
 

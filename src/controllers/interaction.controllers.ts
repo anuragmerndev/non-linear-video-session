@@ -53,7 +53,9 @@ const userInteraction = asyncHandler(
         // @ts-expect-error need to check this _id thing
         const relatedVideo = choiceFound.related_video._id;
 
-        await createInteraction(userID, forQuestion, relatedVideo);
+        const endVideo = choiceFound.next_question === null ? true : false;
+
+        await createInteraction(userID, forQuestion, relatedVideo, endVideo);
 
         const nextVideoInteraction = {
             video_id: relatedVideo,
@@ -72,11 +74,12 @@ const videoSession = asyncHandler(
         const { userID } = req.user!;
 
         const lastSession = await getLastInteraction(userID);
-        if (lastSession) {
+        if (lastSession && !lastSession.endVideo) {
             return apiResponse(res, RESPONSE_STATUS.SUCCESS, {
                 message: responseMessage.QUESTION.RETRIEVED,
                 data: {
                     question_id: lastSession.current_question,
+                    video_id: lastSession.current_video,
                 },
             });
         }
@@ -89,6 +92,7 @@ const videoSession = asyncHandler(
             message: responseMessage.QUESTION.RETRIEVED,
             data: {
                 question_id: initialSession._id,
+                first_video: true,
             },
         });
     },

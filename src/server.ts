@@ -28,7 +28,9 @@ if (ENV === 'production') {
     const numCpus = cpus().length;
 
     if (cluster.isPrimary) {
-        logger.info(`Master thread is running on ${process.pid}`);
+        logger.info(
+            `Master thread is running on ${process.pid} with port ${PORT}`,
+        );
         for (let i = 0; i < numCpus; i++) {
             cluster.fork();
         }

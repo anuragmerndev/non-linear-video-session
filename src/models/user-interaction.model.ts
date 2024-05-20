@@ -17,6 +17,10 @@ const userInteractionSchema = new Schema(
             ref: 'video',
             required: true,
         },
+        endVideo: {
+            type: Boolean,
+            default: false,
+        },
     },
     { timestamps: true },
 );

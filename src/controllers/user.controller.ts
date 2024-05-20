@@ -6,7 +6,7 @@ import { ApiError } from '@utils/apiError';
 import { apiResponse } from '@utils/apiResponse';
 import { asyncHandler } from '@utils/asyncHandler';
 import { errorResponse } from '@utils/errorMessage';
-import { signToken } from '@utils/helper';
+import { compareValue, hashValue, signToken } from '@utils/helper';
 import { responseMessage } from '@utils/responseMessage';
 import { RESPONSE_STATUS } from '@utils/responseStatus';
 
@@ -21,7 +21,9 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
         );
     }
 
-    const newUserData = await newUser({ email, password });
+    const hashPassword = await hashValue(password);
+
+    const newUserData = await newUser({ email, password: hashPassword });
 
     const accessToken = signToken({
         email,
@@ -48,7 +50,9 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
         );
     }
 
-    if (password !== alreadyUser.password) {
+    const validPassword = await compareValue(password, alreadyUser.password!);
+
+    if (!validPassword) {
         throw new ApiError(
             RESPONSE_STATUS.UN_AUTHORIZED,
             errorResponse.USER.WRONG_PASSWORD,

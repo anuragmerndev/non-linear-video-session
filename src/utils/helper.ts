@@ -1,3 +1,4 @@
+import { compare, hash } from 'bcrypt';
 import { sign, verify } from 'jsonwebtoken';
 import mongoose from 'mongoose';
 
@@ -17,4 +18,16 @@ const verifyToken = (payload: string) => {
     return verify(payload, process.env.ACCESS_TOKEN_SECRET!);
 };
 
-export { convertStringToObjectID, signToken, verifyToken };
+const hashValue = async (value: string) =>
+    hash(value, process.env.SALT_ROUNDS!);
+
+const compareValue = async (originalValue: string, compareValue: string) =>
+    compare(originalValue, compareValue);
+
+export {
+    convertStringToObjectID,
+    signToken,
+    verifyToken,
+    hashValue,
+    compareValue,
+};
